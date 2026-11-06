@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <title>Streakly: Habit Tracker</title>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdn.tailwindcss.com/3.4.17"></script>
@@ -15,9 +15,9 @@
 :root{--a:#4f46e5;--b:#7c3aed;--c:#2563eb;color-scheme:dark;box-sizing:border-box;
   padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
   transition:--a 1.4s ease,--b 1.4s ease,--c 1.4s ease}
-html{scroll-padding-top:env(safe-area-inset-top,0px)}
+html{scroll-padding-top:env(safe-area-inset-top,0px); touch-action: manipulation;}
 *,*::before,*::after{box-sizing:border-box}
-body{margin:0;min-height:100vh;color:#f1eeff;font-family:'Outfit',system-ui,-apple-system,'Segoe UI',sans-serif;background:#07050f;overflow-x:hidden}
+body{margin:0;min-height:100vh;color:#f1eeff;font-family:'Outfit',system-ui,-apple-system,'Segoe UI',sans-serif;background:#07050f;overflow-x:hidden;-webkit-text-size-adjust:100%;}
 .bg{position:fixed;inset:0;z-index:-1;background:
   radial-gradient(60% 50% at 15% 0%,color-mix(in srgb,var(--a) 45%,transparent),transparent 70%),
   radial-gradient(55% 45% at 100% 20%,color-mix(in srgb,var(--b) 40%,transparent),transparent 70%),
@@ -26,7 +26,7 @@ body{margin:0;min-height:100vh;color:#f1eeff;font-family:'Outfit',system-ui,-app
   border:1px solid color-mix(in srgb,var(--c) 38%,rgba(255,255,255,.14));border-radius:24px;
   box-shadow:0 12px 44px -12px color-mix(in srgb,var(--a) 65%,transparent),inset 0 1px 0 rgba(255,255,255,.14)}
 .grad-text{background:linear-gradient(90deg,var(--c),var(--b),var(--a));-webkit-background-clip:text;background-clip:text;color:transparent;filter:brightness(1.5)}
-.field{width:100%;background:rgba(10,6,25,.55);border:1px solid rgba(255,255,255,.14);border-radius:14px;padding:.7rem .9rem;color:#fff;font:inherit;font-size:.95rem;outline:none;transition:border-color .2s,box-shadow .2s}
+.field{width:100%;background:rgba(10,6,25,.55);border:1px solid rgba(255,255,255,.14);border-radius:14px;padding:.7rem .9rem;color:#fff;font:inherit;font-size:16px;outline:none;transition:border-color .2s,box-shadow .2s}
 .field::placeholder{color:rgba(230,225,255,.38)}
 .field:focus{border-color:var(--c);box-shadow:0 0 0 3px color-mix(in srgb,var(--c) 35%,transparent)}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;font-weight:700;border-radius:14px;padding:.8rem 1.1rem;color:#fff;border:0;cursor:pointer;
@@ -254,7 +254,7 @@ body{margin:0;min-height:100vh;color:#f1eeff;font-family:'Outfit',system-ui,-app
     }
   }
 
-  /* ---------- emoji pop-ups ---------- */
+  /* ---------- emoji pop-ups (Changed to ~twice a day: every 12 hours) ---------- */
   let lastPop = 0;
   function pop(kind = 'idle') {
     const box = $('#pops');
@@ -270,8 +270,10 @@ body{margin:0;min-height:100vh;color:#f1eeff;font-family:'Outfit',system-ui,-app
     box.appendChild(el);
     lastPop = Date.now();
   }
-  (function loop() { setTimeout(() => { if (!document.hidden) pop('idle'); loop(); }, 6000 + Math.random() * 6000); })();
-  document.addEventListener('pointerdown', () => { if (Date.now() - lastPop > 4000 && Math.random() < .22) pop('idle'); });
+  (function loop() { 
+    // 43200000 ms = 12 hours (Twice a day)
+    setTimeout(() => { if (!document.hidden) pop('idle'); loop(); }, 43200000); 
+  })();
 
   /* ---------- actions ---------- */
   dash.addEventListener('click', (e) => {
